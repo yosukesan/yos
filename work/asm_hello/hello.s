@@ -19,14 +19,15 @@ puts:
     movb ah, 0x0e
 
 _puts.l1:    
-    lodsb
+    lodsb # read 1byte to AL
     cmp al, 0x00
-    jz _puts.l2
+    jz _puts.l2 #if comp is matched jump to function _puts.l2;w
+
     int 0x10
     jmp _puts.l1
 
 _puts.l2:    
-    popw ax
+    popw ax # pop from stack
     ret 
 
     .align 0x10
