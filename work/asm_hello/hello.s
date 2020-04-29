@@ -7,24 +7,34 @@
     .text # @ 7c00
 
 _start:
-    movb ah, 0x0e
-    movb al, 'H'
-    int 0x10
-    movb al, 'e'
-    int 0x10
-    movb al, 'l'
-    int 0x10
-    movb al, 'l'
-    int 0x10
-    movb al, 'o'
-    int 0x10
+    lea si, hello_world
+    call puts
 
 _halt:
     hlt
     jmp _halt
 
-    .data # @ 7dfe
+puts:
+    pushw ax
+    movb ah, 0x0e
 
+_puts.l1:    
+    lodsb
+    cmp al, 0x00
+    jz _puts.l2
+    int 0x10
+    jmp _puts.l1
+
+_puts.l2:    
+    popw ax
+    ret 
+
+    .align 0x10
+
+hello_world:
+    .string "Hello world!\n"
+    .data # @ 7dfe
+    
 mbr_signature:
     .byte 0x55
     .byte 0xAA
